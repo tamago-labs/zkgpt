@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "> TODO: description",
   "author": "pisuthd <pisuth.dae@gmail.com>",
-  "homepage": "https://github.com/pisuthd/zkvq#readme",
+  "homepage": "https://github.com/pisuthd/zk-pragma#readme",
   "license": "MIT",
   "main": "lib/index.js",
   "directories": {
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pisuthd/zkvq.git"
+    "url": "git+https://github.com/pisuthd/zk-pragma.git"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -43,6 +43,6 @@
     "test": "node ./__tests__/node.test.js"
   },
   "bugs": {
-    "url": "https://github.com/pisuthd/zkvq/issues"
+    "url": "https://github.com/pisuthd/zk-pragma/issues"
   }
 }
