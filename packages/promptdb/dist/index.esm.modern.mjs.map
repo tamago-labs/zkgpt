@@ -1,0 +1,1 @@
+{"version":3,"file":"index.esm.modern.mjs","sources":["../lib/index.js"],"sourcesContent":["\"use strict\";\n\nconst PromptClient = require(\"./client\")\n\nmodule.exports = {\n  PromptClient\n}"],"names":["PromptClient","require","module","exports"],"mappings":"AAEA,MAAMA,EAAeC,QAAQ,YAE7BC,OAAOC,QAAU,CACfH"}
