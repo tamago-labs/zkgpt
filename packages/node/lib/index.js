@@ -12,10 +12,18 @@ export const app = express();
 app.use(express.json());
 app.use(cors())
 
-app.listen(8000, () => {
+export const server = app.listen(8000, () => {
     console.log(`Server Started at ${8000}`)
 })
 
 app.get('/', async (req, res) => {
     return res.status(200).json({ status: "ok" });
 });
+
+// create collection
+
+// list all collections
+
+// get collection
+
+// delete collection

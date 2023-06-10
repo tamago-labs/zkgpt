@@ -1,9 +1,9 @@
 const axios = require("axios")
 
+const MESSAGE = "Sign this message to submit"
+
 class PromptClient {
 
-
-    connected = false
     host
 
     constructor(host = "http://localhost:8000") {
@@ -15,6 +15,25 @@ class PromptClient {
         return data.status
     }
 
+    createCollection = async ({
+        name,
+        signer
+    }) => {
+        const signature = await signer.signMessage(MESSAGE)
+        console.log("signature --> ", signature)
+    }
+
+    listCollections = async () => {
+
+    }
+
+    getCollection = async () => {
+
+    }
+
+    deleteCollection = async () => {
+
+    }
 
 }
 

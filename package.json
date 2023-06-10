@@ -11,7 +11,7 @@
     "package:client": "lerna run --scope client --stream dev",
     "package:promptdb": "lerna run --scope promptdb --stream dev",
     "build": "lerna run --parallel build",
-    "test": "lerna run test"
+    "test": "lerna run test;"
   },
   "devDependencies": {
     "lerna": "^6.6.2",
