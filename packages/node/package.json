@@ -18,7 +18,7 @@
     "url": "git+https://github.com/pisuthd/zkprompt.git"
   },
   "dependencies": {
-    "promptdb" : "*",
+    "sdk" : "*",
     "cors": "^2.8.5",
     "cross-blob": "^3.0.2",
     "dotenv": "^16.0.3",

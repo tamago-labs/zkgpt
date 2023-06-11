@@ -1,8 +1,9 @@
-const axios = require("axios")
+
+import axios from "axios"
 
 const MESSAGE = "Sign this message to submit"
 
-class PromptClient {
+export class PromptClient {
 
     host
 
@@ -36,5 +37,3 @@ class PromptClient {
     }
 
 }
-
-module.exports = PromptClient

@@ -9,9 +9,9 @@
     "start": "run-p --print-label package:*",
     "package:node": "lerna run --scope node --stream dev",
     "package:client": "lerna run --scope client --stream dev",
-    "package:promptdb": "lerna run --scope promptdb --stream dev",
+    "package:sdk": "lerna run --scope sdk --stream dev",
     "build": "lerna run --parallel build",
-    "test": "lerna run test;"
+    "test": "lerna run test --concurrency 1 --stream"
   },
   "devDependencies": {
     "lerna": "^6.6.2",
