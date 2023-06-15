@@ -55,6 +55,8 @@ describe("#contracts", () => {
 
         const commitment = prove.publicSignals[0]
 
+        expect(`${await server.generateCollectionCommitment(1, "1234")}`, `${commitment}`)
+
         await zkpragma.createCollection(name, commitment, proof)
 
         const collectionName = await zkpragma.collectionName(1)
@@ -76,7 +78,7 @@ describe("#contracts", () => {
             collection: "My New Collection",
             signature,
             docs: bitcoinAbstract,
-            password: "1234"
+            password: "5678"
         })
 
         const prove = await plonk.fullProve(
@@ -107,7 +109,7 @@ describe("#contracts", () => {
             collection: "My New Collection",
             signature,
             docs: bancorAbstract,
-            password: "1234"
+            password: "ABCD"
         })
 
         const prove = await plonk.fullProve(
@@ -142,6 +144,30 @@ describe("#contracts", () => {
         // check 2nd docs
         const docsCommitment2 = await zkpragma.getDocsCommitment(1, 2)
         expect(await server.generateDocsCommitment(bob.address, bancorAbstract)).to.equal(docsCommitment2)
+    })
+
+    it("should get all docs and decrypt the original content back success", async function () {
+
+        // check 1st docs
+        const docsCommitment1 = await zkpragma.getDocsCommitment(1, 1)
+        const content1 = await server.getDocs({
+            collection : "My New Collection",
+            docsCommitment : docsCommitment1,
+            password : "5678"
+        })
+
+        expect(content1).to.equal(bitcoinAbstract)
+
+        // check 2nd docs
+        const docsCommitment2 = await zkpragma.getDocsCommitment(1, 2)
+        const content2 = await server.getDocs({
+            collection : "My New Collection",
+            docsCommitment : docsCommitment2,
+            password : "ABCD"
+        })
+
+        expect(content2).to.equal(bancorAbstract)
+        
     })
 
 })

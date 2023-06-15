@@ -1,22 +1,20 @@
 // import { HNSWLib } from "langchain/vectorstores/hnswlib";
 import PouchDB from 'pouchdb';
-
-import { buildPoseidon } from "circomlibjs"
 import { ethers } from "ethers";
 // import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
 import { slugify, encode } from "../helpers";
-
+import { Base } from "./base"
 import fs from "node:fs/promises";
-
 
 PouchDB.plugin(require('crypto-pouch'))
 
-export class PragmaServer {
+export class PragmaServer extends Base {
 
     collections
 
     constructor() {
+        super()
         this.collections = []
     }
 
@@ -66,24 +64,25 @@ export class PragmaServer {
         return docCommitment
     }
 
-    generateDocsCommitment = async (owner, docs) => { 
-        return await this.hashItems([owner,docs])
-    }
+    getDocs = async ({
+        collection,
+        docsCommitment,
+        password
+    }) => {
+        const slug = slugify(collection)
+        const db = new PouchDB(slug)
 
-    hash = async (content) => {
-        const poseidon = await buildPoseidon()
-        // const preImage = [this.encode(content)].reduce((sum, x) => sum + x, 0n);
-        return poseidon.F.toObject(poseidon([encode(content)]))
-    }
-
-    hashItems = async (items) => {
-        const poseidon = await buildPoseidon()
-        let hashed = []
-        for (let item of items) {
-            hashed.push(await this.hash(item))
+        if (password) {
+            await db.crypto(password)
         }
-        const preImage = hashed.reduce((sum, x) => sum + x, 0n);
-        return poseidon.F.toObject(poseidon([preImage]))
+
+        const docs = await db.get(`${docsCommitment}`)
+
+        if (password) {
+            db.removeCrypto()
+        }
+
+        return docs.document
     }
 
     destroy = async () => {
