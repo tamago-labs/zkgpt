@@ -1,5 +1,7 @@
 
-import { PromptClient } from "./client"
+import { PragmaClient } from "./client"
 import { OpenAIEmbeddingFunction } from "./embeddings"
+import { PragmaServer } from "./server" 
 
-export { PromptClient, OpenAIEmbeddingFunction}
+export { PragmaClient, PragmaServer, OpenAIEmbeddingFunction }
+

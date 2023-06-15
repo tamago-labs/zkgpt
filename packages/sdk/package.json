@@ -6,7 +6,7 @@
   "homepage": "https://github.com/pisuthd/zkprompt#readme",
   "license": "MIT",
   "main": "dist/sdk.cjs",
-  "module" : "dist/sdk.esm.js",
+  "module": "dist/sdk.esm.js",
   "source": "lib/sdk.js",
   "directories": {
     "lib": "lib",
@@ -31,7 +31,13 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
+    "bigint-conversion": "^2.4.1",
+    "circomlibjs": "^0.1.7",
+    "crypto-pouch": "^4.0.1",
+    "ethers": "5.7.1",
     "hnswlib-node": "^1.4.2",
-    "langchain": "^0.0.92"
+    "langchain": "^0.0.92",
+    "pouchdb": "^8.0.1",
+    "snarkjs": "^0.7.0"
   }
 }

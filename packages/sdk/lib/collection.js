@@ -1,4 +1,4 @@
-import { HNSWLib } from "langchain/vectorstores/hnswlib";
+// import { HNSWLib } from "langchain/vectorstores/hnswlib";
 
 
 export class Collection {
