@@ -97,7 +97,7 @@ describe("#contracts", () => {
 
         const proof = JSON.parse(calldata.substring(0, calldata.indexOf("]") + 1))
 
-        await zkpragma.attachDocs(1, docsCommit, await server.hash(alice.address), proof)
+        await zkpragma.attachDocs("Bitcoin abstract",1, docsCommit, await server.hash(alice.address), proof)
 
     })
 
@@ -128,7 +128,7 @@ describe("#contracts", () => {
 
         const proof = JSON.parse(calldata.substring(0, calldata.indexOf("]") + 1))
 
-        await zkpragma.attachDocs(1, docsCommit, await server.hash(bob.address), proof)
+        await zkpragma.attachDocs("Bancor abstract",1, docsCommit, await server.hash(bob.address), proof)
 
     })
 

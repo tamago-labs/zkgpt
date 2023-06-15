@@ -12,6 +12,7 @@ contract zkPragma {
     }
 
     struct Document {
+        string name;
         uint256 commitment;
         uint timestamp;
     }
@@ -77,6 +78,7 @@ contract zkPragma {
 
     // add new docs
     function attachDocs(
+        string memory _name, // public
         uint256 _collectionId,
         uint256 _docsCommitment,
         uint256 _ownerAddress, // in poseidon hash
@@ -84,6 +86,7 @@ contract zkPragma {
     ) external {
         docCount[_collectionId] += 1;
 
+        documents[_collectionId][docCount[_collectionId]].name = _name;
         documents[_collectionId][docCount[_collectionId]]
             .commitment = _docsCommitment;
         documents[_collectionId][docCount[_collectionId]].timestamp = block
@@ -119,5 +122,10 @@ contract zkPragma {
     // get docs commitment
     function getDocsCommitment(uint256 _collectionId, uint256 _docsId) external view returns (uint256) {
         return documents[_collectionId][_docsId].commitment;
+    }
+
+    // get docs name
+    function getDocsName(uint256 _collectionId, uint256 _docsId) external view returns (string memory) {
+        return documents[_collectionId][_docsId].name;
     }
 }
