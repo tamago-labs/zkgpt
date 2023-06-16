@@ -1,6 +1,6 @@
 import chai from "chai";
 import chaiHttp from "chai-http"
-import { server, pragma } from "../lib/index.js"
+import { server, gpt } from "../lib/index.js"
 
 import { ethers } from "ethers"
 
@@ -12,7 +12,7 @@ const { expect } = chai
 describe('#api', function () {
 
     before(function () {
-        pragma.useMemory()
+        gpt.useMemory()
     })
 
     it('should get server status success ', (done) => {

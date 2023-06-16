@@ -7,21 +7,26 @@
 const hre = require("hardhat");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  
+  const collectionVerifier = await hre.ethers.deployContract("collectionVerifier", []);
+  const docsVerifier = await hre.ethers.deployContract("docsVerifier", []);
 
-  const lockedAmount = hre.ethers.parseEther("0.001");
+  console.log("deploying collectionVerifier...")
+  
+  await collectionVerifier.waitForDeployment();
 
-  const lock = await hre.ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
+  console.log("deploying docsVerifier...")
 
-  await lock.waitForDeployment();
+  await docsVerifier.waitForDeployment();
+
+  console.log("deploying zkGPT...")
+
+  const zkgpt = await hre.ethers.deployContract("zkGPT", [collectionVerifier.target, docsVerifier.target]);
+
+  await zkgpt.waitForDeployment();
 
   console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
+    `Deployed to ${zkgpt.target}`
   );
 }
 

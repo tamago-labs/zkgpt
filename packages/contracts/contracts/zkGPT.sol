@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 import "./collectionVerifier.sol";
 import "./docsVerifier.sol";
 
-contract zkPragma {
+contract zkGPT {
     struct Collection {
         string name;
         uint256 commitment;

@@ -8,7 +8,7 @@
     "bootstrap": "npm install; lerna bootstrap;",
     "start": "run-p --print-label package:*",
     "package:client": "lerna run --scope client --stream dev",
-    "package:sdk": "lerna run --scope sdk --stream dev",
+    "package:lib": "lerna run --scope lib --stream dev",
     "package:node": "lerna run --scope node --stream dev",
     "build": "lerna run --parallel build",
     "test": "lerna run test --concurrency 1 --stream"

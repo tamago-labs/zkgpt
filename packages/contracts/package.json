@@ -12,8 +12,9 @@
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",
     "circom_tester": "^0.0.19",
     "circomlibjs": "^0.1.7",
+    "dotenv": "^16.1.4",
     "hardhat": "^2.15.0",
-    "sdk": "*",
+    "lib": "*",
     "snarkjs": "^0.7.0"
   }
 }

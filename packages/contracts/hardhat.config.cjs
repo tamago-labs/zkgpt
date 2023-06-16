@@ -1,5 +1,9 @@
 require("@nomicfoundation/hardhat-toolbox");
 
+require("dotenv").config()
+
+const PRIVATE_KEY = process.env.PRIVATE_KEY
+
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   mocha: {
@@ -13,5 +17,12 @@ module.exports = {
         runs: 200
       }
     },
+  },
+  networks: {
+    bnbTestnet: {
+      chainId: 97,
+      url: "https://data-seed-prebsc-2-s1.binance.org:8545",
+      accounts: [PRIVATE_KEY],
+    }
   }
 };

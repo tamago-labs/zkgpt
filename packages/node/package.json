@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "> TODO: description",
   "author": "pisuthd <pisuth.dae@gmail.com>",
-  "homepage": "https://github.com/pisuthd/zkprompt#readme",
+  "homepage": "https://github.com/pisuthd/zkgpt#readme",
   "license": "MIT",
   "main": "lib/index.js",
   "directories": {
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pisuthd/zkprompt.git"
+    "url": "git+https://github.com/pisuthd/zkgpt.git"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -29,7 +29,7 @@
     "langchain": "^0.0.75",
     "merkletreejs": "^0.3.10",
     "node-fetch": "^3.3.1",
-    "sdk": "*"
+    "lib": "*"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.1",
@@ -43,6 +43,6 @@
     "test": "mocha --timeout 60000 --reporter spec test/*.js"
   },
   "bugs": {
-    "url": "https://github.com/pisuthd/zkprompt/issues"
+    "url": "https://github.com/pisuthd/zkgpt/issues"
   }
 }

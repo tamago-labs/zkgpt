@@ -5,12 +5,15 @@ import { ethers } from "ethers";
 
 import { slugify, encode } from "../helpers";
 import { Base } from "./base"
+
 import fs from "node:fs/promises";
+import cryptoPouch from "crypto-pouch"
+import pounchAdapterMemory from "pouchdb-adapter-memory"
 
-PouchDB.plugin(require('crypto-pouch'))
-PouchDB.plugin(require("pouchdb-adapter-memory"))
+PouchDB.plugin(cryptoPouch)
+PouchDB.plugin(pounchAdapterMemory)
 
-export class PragmaServer extends Base {
+export class GptServer extends Base {
 
     isMemory
 
@@ -121,6 +124,7 @@ export class PragmaServer extends Base {
     destroy = async () => {
 
         if (this.isMemory === false) {
+            
             const collections = await this.allCollection()
             for (let collection of collections) {
                 const db = new PouchDB(collection)
