@@ -8,26 +8,60 @@ import { Base } from "./base"
 import fs from "node:fs/promises";
 
 PouchDB.plugin(require('crypto-pouch'))
+PouchDB.plugin(require("pouchdb-adapter-memory"))
 
 export class PragmaServer extends Base {
 
-    collections
+    isMemory
 
     constructor() {
         super()
-        this.collections = []
+        this.isMemory = false
+    }
+
+    useMemory = () => {
+        this.isMemory = true
+    }
+
+    // keep track all collection slug
+    addCollection = async (slug) => {
+        const db = this.getDb("slugs")
+        await db.put({
+            _id: `${slug}`
+        })
+
+    }
+
+    allCollection = async () => {
+        const slugDb = this.getDb("slugs")
+        const { rows } = await slugDb.allDocs();
+        return rows.map(item => (item.id))
+    }
+
+    getDb = (slug) => {
+        if (this.isMemory) {
+            return new PouchDB(slug, { adapter: 'memory' })
+        }
+        return new PouchDB(slug)
     }
 
     requestCollectionCreation = async (collectionName) => {
         const slug = slugify(collectionName)
 
-        if (this.collections.includes(slug)) {
-            throw new Error("Given name is duplicated")
+        // check if exist
+        try {
+            const slugDb = this.getDb("slugs")
+            await slugDb.get(`${slug}`)
+            throw new Error("DUPLICATED")
+        } catch (e) {
+            if (e.message === "DUPLICATED") {
+                throw new Error("Given name is duplicated")
+            }
         }
 
-        const db = new PouchDB(slug)
+        const db = this.getDb(slug)
 
-        this.collections.push(slug)
+        this.addCollection(slug)
 
         return {
             name: collectionName,
@@ -43,11 +77,10 @@ export class PragmaServer extends Base {
     }) => {
 
         const slug = slugify(collection)
-        const db = new PouchDB(slug)
+        const db = this.getDb(slug)
 
         const docsOwner = ethers.utils.verifyMessage("Sign to proceed", signature)
         const docCommitment = await this.generateDocsCommitment(docsOwner, docs)
-
         if (password) {
             await db.crypto(password)
         }
@@ -61,7 +94,7 @@ export class PragmaServer extends Base {
             db.removeCrypto()
         }
 
-        return docCommitment
+        return `${docCommitment}`
     }
 
     getDocs = async ({
@@ -70,7 +103,7 @@ export class PragmaServer extends Base {
         password
     }) => {
         const slug = slugify(collection)
-        const db = new PouchDB(slug)
+        const db = this.getDb(slug)
 
         if (password) {
             await db.crypto(password)
@@ -87,12 +120,18 @@ export class PragmaServer extends Base {
 
     destroy = async () => {
 
-        for (let collection of this.collections) {
-            const db = new PouchDB(collection)
-            await db.destroy();
-            // delete directory recursively
-            await fs.rm(collection, { recursive: true, force: true })
+        if (this.isMemory === false) {
+            const collections = await this.allCollection()
+            for (let collection of collections) {
+                const db = new PouchDB(collection)
+                await db.destroy();
+                // delete directory recursively
+                await fs.rm(collection, { recursive: true, force: true })
+            }
+            const db = new PouchDB("slugs")
+            await db.destroy()
         }
+
     }
 
 }
