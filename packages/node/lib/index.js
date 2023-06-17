@@ -57,14 +57,14 @@ app.post('/docs/new', async (req, res) => {
         const { body } = req
         const { collection, signature, docs, password } = body
 
-        const docsCommitment = await gpt.requestDocsCreation({
+        const {docsCommitment, docsHashed, accountHashed} = await gpt.requestDocsCreation({
             collection,
             signature,
             docs,
             password
         })
 
-        return res.status(200).json({ status: "ok", docsCommitment });
+        return res.status(200).json({ status: "ok", docsCommitment , docsHashed, accountHashed });
     } catch (e) {
         return res.status(400).json({ status: "error", error: e.message });
     }
