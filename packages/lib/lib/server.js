@@ -83,13 +83,17 @@ export class GptServer extends Base {
         const db = this.getDb(slug)
 
         const docsOwner = ethers.utils.verifyMessage("Sign to proceed", signature)
-        const docCommitment = await this.generateDocsCommitment(docsOwner, docs)
+        const docsCommitment = await this.generateDocsCommitment(docsOwner, docs)
+
+        const accountHashed = await this.hash(docsOwner)
+        const docsHashed = await this.hash(docs)
+
         if (password) {
             await db.crypto(password)
         }
 
         await db.put({
-            _id: `${docCommitment}`,
+            _id: `${docsCommitment}`,
             document: docs
         })
 
@@ -97,7 +101,11 @@ export class GptServer extends Base {
             db.removeCrypto()
         }
 
-        return `${docCommitment}`
+        return {
+            docsCommitment : `${docsCommitment}`,
+            accountHashed : `${accountHashed}`,
+            docsHashed : `${docsHashed}`
+        }
     }
 
     getDocs = async ({
