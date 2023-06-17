@@ -74,7 +74,7 @@ describe("#contracts", () => {
 
         const signature = await alice.signMessage("Sign to proceed")
 
-        const docsCommit = await server.requestDocsCreation({
+        const { docsCommitment } = await server.requestDocsCreation({
             collection: "My New Collection",
             signature,
             docs: bitcoinAbstract,
@@ -97,7 +97,7 @@ describe("#contracts", () => {
 
         const proof = JSON.parse(calldata.substring(0, calldata.indexOf("]") + 1))
 
-        await zkgpt.attachDocs("Bitcoin abstract",1, docsCommit, await server.hash(alice.address), proof)
+        await zkgpt.attachDocs("Bitcoin abstract", 1, docsCommitment, await server.hash(alice.address), proof)
 
     })
 
@@ -105,7 +105,7 @@ describe("#contracts", () => {
 
         const signature = await bob.signMessage("Sign to proceed")
 
-        const docsCommit = await server.requestDocsCreation({
+        const { docsCommitment } = await server.requestDocsCreation({
             collection: "My New Collection",
             signature,
             docs: bancorAbstract,
@@ -128,7 +128,7 @@ describe("#contracts", () => {
 
         const proof = JSON.parse(calldata.substring(0, calldata.indexOf("]") + 1))
 
-        await zkgpt.attachDocs("Bancor abstract",1, docsCommit, await server.hash(bob.address), proof)
+        await zkgpt.attachDocs("Bancor abstract",1, docsCommitment, await server.hash(bob.address), proof)
 
     })
 
@@ -167,7 +167,7 @@ describe("#contracts", () => {
         })
 
         expect(content2).to.equal(bancorAbstract)
-        
+
     })
 
 })
