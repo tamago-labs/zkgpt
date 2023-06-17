@@ -1,12 +1,9 @@
- 
+
 const MainLayout = ({ children }) => {
     return (
         <main>
             <div class="flex h-screen">
-                
-                <div class="flex-1 flex flex-col">
-                    {children}
-                </div>
+                {children}
             </div>
         </main>
     )

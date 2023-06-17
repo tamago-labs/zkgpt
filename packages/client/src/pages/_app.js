@@ -3,7 +3,7 @@ import '@/styles/globals.css'
 import { ethers } from "ethers";
 import { Web3ReactProvider } from '@web3-react/core';
 import AccountProvider from "../hooks/useAccount"
-import PromptProvider from "../hooks/usePrompt"
+import GptProvider from "../hooks/useGPT"
 
 const getLibrary = (provider) => {
   const library = new ethers.providers.Web3Provider(provider)
@@ -15,9 +15,9 @@ export default function App({ Component, pageProps }) {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <AccountProvider>
-        <PromptProvider>
+        <GptProvider>
           <Component {...pageProps} />
-        </PromptProvider>
+        </GptProvider>
       </AccountProvider>
     </Web3ReactProvider>
   )

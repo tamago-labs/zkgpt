@@ -16,14 +16,13 @@ const Header = () => {
         <div class="grid grid-cols-2 gap-3 px-2 mt-4 mb-4">
             <div class="col-span-1 flex flex-col">
                 <h1 class="text-3xl text-white font-bold">
-                    zkPrompt
-                </h1>
-                <p class="text-sm text-gray-300 hidden md:block ">A self-sovereign generative AI protocol</p>
+                    zkGPT
+                </h1> 
             </div>
             <div class="col-span-1">
                 <div class="flex flex-row ">
                     <div class="flex-1 text-right">
-                        <a href="https://github.com/pisuthd/zk-pragma" target="_blank" className="text-sm mr-5 hover:underline">GitHub</a>
+                        <a href="https://github.com/pisuthd/zkgpt" target="_blank" className="text-sm mr-5 hover:underline">GitHub</a>
                         {(account && corrected) && (
                             <>
                                 <button class=" bg-transparent border-0 text-white font-semibold hover:underline py-2 px-4  rounded-lg text-sm  ">
