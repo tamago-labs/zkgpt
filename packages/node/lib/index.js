@@ -10,7 +10,9 @@ import 'dotenv/config'
 
 export const app = express();
 
-export const gpt = new GptServer()
+export const gpt = new GptServer({
+    openAIApiKey: process.env.OPENAI_API_KEY
+})
 
 app.use(express.json());
 app.use(cors())
@@ -32,7 +34,7 @@ app.get('/collections', async (req, res) => {
     } catch (e) {
         return res.status(400).json({ status: "error", error: e.message });
     }
- 
+
 })
 
 // new collection
@@ -57,14 +59,14 @@ app.post('/docs/new', async (req, res) => {
         const { body } = req
         const { collection, signature, docs, password } = body
 
-        const {docsCommitment, docsHashed, accountHashed} = await gpt.requestDocsCreation({
+        const { docsCommitment, docsHashed, accountHashed } = await gpt.requestDocsCreation({
             collection,
             signature,
             docs,
             password
         })
 
-        return res.status(200).json({ status: "ok", docsCommitment , docsHashed, accountHashed });
+        return res.status(200).json({ status: "ok", docsCommitment, docsHashed, accountHashed });
     } catch (e) {
         return res.status(400).json({ status: "error", error: e.message });
     }
@@ -94,13 +96,43 @@ app.get('/docs/:collection/:commitment', async (req, res) => {
     } catch (e) {
         return res.status(400).json({ status: "error", error: e.message });
     }
-
-
 })
 
+// query
+app.post('/query', async (req, res) => {
 
+    try {
+        const { body } = req
 
+        const { prompt, signature, collection, collectionId, password, collectionCommitment, docsIds } = body
 
+        const encodedPrompt = await gpt.encodePrompt({
+            prompt,
+            signature
+        })
+
+        const prove = await gpt.generatePromptProve({
+            collectionId,
+            password,
+            collectionCommitment,
+            signature,
+            encodedPrompt
+        })
+
+        const output = await gpt.query({
+            prompt,
+            signature,
+            collection,
+            password,
+            prove,
+            docsIds
+        })
+
+        return res.status(200).json({ status: "ok", output });
+    } catch (e) {
+        return res.status(400).json({ status: "error", error: e.message });
+    }
+})
 
 
 
