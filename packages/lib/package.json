@@ -35,7 +35,6 @@
     "circomlibjs": "^0.1.7",
     "crypto-pouch": "^4.0.1",
     "ethers": "5.7.1",
-    "hnswlib-node": "^1.4.2",
     "langchain": "^0.0.92",
     "pouchdb": "^8.0.1",
     "pouchdb-adapter-memory": "^8.0.1",
