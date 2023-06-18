@@ -134,5 +134,19 @@ app.post('/query', async (req, res) => {
     }
 })
 
+// get prompts 
+app.get('/prompt/:address', async (req, res) => {
 
+    try {
+        const { params } = req
+
+        const { address } = params
+
+        const result = await gpt.getPromptResult(address)
+ 
+        return res.status(200).json({ status: "ok" , ...result});
+    } catch (e) {
+        return res.status(400).json({ status: "error", error: e.message });
+    }
+})
 

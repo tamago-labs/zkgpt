@@ -58,7 +58,7 @@ describe('#api', function () {
             .post('/docs/new')
             .send(input)
             .end((err, res) => {
-                const { body } = res 
+                const { body } = res
                 expect(body.docsCommitment).equal("15503903167908348755327793333186539423696709066170461443290096958058599065733")
                 done();
             });
@@ -69,7 +69,7 @@ describe('#api', function () {
         chai.request(server)
             .get('/docs/my-new-collection/15503903167908348755327793333186539423696709066170461443290096958058599065733?password=1234')
             .end((err, res) => {
-                const { body } = res 
+                const { body } = res
                 expect(body.content).equal(SAMPLE_DOCS)
                 done();
             });
@@ -94,19 +94,19 @@ describe('#api', function () {
                 const input = {
                     signature,
                     prompt: "What are top 3 cities in Japan?",
-                    collectionId : 1,
+                    collectionId: 1,
                     collection: "My new collection",
                     password: PASSWORD,
-                    collectionCommitment : `${collectionCommitment}`,
+                    collectionCommitment: `${collectionCommitment}`,
                     docsIds: ["15503903167908348755327793333186539423696709066170461443290096958058599065733"]
                 }
-        
+
                 chai.request(server)
                     .post('/query')
                     .send(input)
                     .end((err, res) => {
                         const { body } = res
-                        const  {output} = body
+                        const { output } = body
                         expect(output.includes("Tokyo")).to.true
                         expect(output.includes("Yokohama")).to.true
                         expect(output.includes("Osaka")).to.true
@@ -114,8 +114,20 @@ describe('#api', function () {
                     });
             }
         )
+    })
 
+    it('should get prompt result success ', (done) => {
 
+        const addressInPoseison = "12471271009054474401476677111111445258455795464701002131744189241477548691390"
+
+        chai.request(server)
+            .get(`/prompt/${addressInPoseison}`) 
+            .end((err, res) => { 
+                const { body } = res
+                const { prompts  } = body
+                expect(prompts[0]).to.equal("What are top 3 cities in Japan?")
+                done();
+            });
     })
 
 })
