@@ -26,13 +26,24 @@ export default function Collection({ slug }) {
     const { account } = useWeb3React()
 
     const [nav, setNav] = useState(NAV.QUERY)
-    const { getCollection } = useContext(GptContext)
+    const { getCollection, listDocs } = useContext(GptContext)
 
     const [ collection, setCollection ] = useState()
+    const [loading, setLoading] = useState(true)
+    const [docs, setDocs] = useState()
 
     useEffect(() => {
         account && slug && getCollection(slug).then(setCollection)
     },[slug, account])
+
+    useEffect(() => {
+        collection && listDocs(collection).then(
+            (docs) => {
+                setDocs(docs)
+                setLoading(false)
+            }
+        )
+    }, [collection])
  
     return (
         <MainLayout>
@@ -45,8 +56,8 @@ export default function Collection({ slug }) {
                 </IconWrapper>
             </div>
             <div class="  flex-grow bg-gray-900 text-white overflow-y-auto flex flex-col">
-                {nav === NAV.QUERY && <Query collection={collection} slug={slug} />}
-                {nav === NAV.EDIT && <EditCollection collection={collection} slug={slug} />}
+                {nav === NAV.QUERY && <Query loading={loading} docs={docs} collection={collection} slug={slug} />}
+                {nav === NAV.EDIT && <EditCollection loading={loading} docs={docs} collection={collection} slug={slug} />}
             </div>
         </MainLayout>
     )

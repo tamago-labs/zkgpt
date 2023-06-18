@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useReducer,
 import { useWeb3React } from "@web3-react/core"
 import axios from "axios"
 import { ethers } from "ethers";
+import { buildPoseidon } from "circomlibjs"
 import ABI from "../abi"
 import CreateCollectionModal from "@/modals/createCollection"
 import AddDocsModal from "@/modals/addDocs";
@@ -214,6 +215,46 @@ const Provider = ({ children }) => {
 
     }, [account, library])
 
+    const query = useCallback(async ({
+        password,
+        prompt,
+        collection,
+        docs
+    }) => {
+
+        const signature = await library.getSigner().signMessage("Sign to proceed")
+        
+        const input = {
+            collection : collection.name,
+            collectionId : collection.id,
+            collectionCommitment : collection.commitment,
+            password,
+            prompt,
+            docsIds : docs.map(item => item.commitment),
+            signature
+        }
+
+        const { data } = await axios.post(`${host}/query`, {
+            ...input
+        })
+
+        console.log("data : ", data)
+
+    },[account, library ])
+
+    const loadPromptResult = useCallback(async () => {
+
+        // convert to poseidon hash
+        const poseidon = await buildPoseidon() 
+        const hash = `${poseidon.F.toObject(poseidon([encode(account)]))}`
+
+        console.log("hash : ", hash)
+
+        const { data } = await axios.get(`${host}/prompt/${hash}`)
+
+        return data
+    },[account])
+
     const gptContext = useMemo(
         () => ({
             showCreateModal,
@@ -223,9 +264,11 @@ const Provider = ({ children }) => {
             showAddDocsModal,
             addDocs,
             listDocs,
-            getCollection
+            getCollection,
+            query,
+            loadPromptResult
         }),
-        [createCollection, getCollection, addDocs, listDocs]
+        [createCollection, query, getCollection, addDocs, listDocs, loadPromptResult]
     )
 
     return (

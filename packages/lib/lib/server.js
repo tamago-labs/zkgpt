@@ -149,15 +149,15 @@ export class GptServer extends Base {
         prompt
     }) => {
 
-        const address = ethers.utils.verifyMessage(DEFAULT_MESSAGE, signature) 
+        const address = ethers.utils.verifyMessage(DEFAULT_MESSAGE, signature)
         const addressHashed = await this.hash(address)
 
-        const {prompts} = await this.getPromptResult(addressHashed)
-        
+        const { prompts } = await this.getPromptResult(addressHashed)
+
         let encoded = []
 
-        for (let i = 0; i < MAX_PROMPT; i++) { 
-            const p = prompts[i] 
+        for (let i = 0; i < MAX_PROMPT; i++) {
+            const p = prompts[i]
             if (p) {
                 encoded.push(await this.hash(p))
             } else {
@@ -189,7 +189,7 @@ export class GptServer extends Base {
         } catch (e) {
             // console.log(e)
             prompts = []
-            result= []
+            result = []
         }
         return {
             prompts,
@@ -206,9 +206,9 @@ export class GptServer extends Base {
         docsIds
     }) => {
 
-        const address = ethers.utils.verifyMessage(DEFAULT_MESSAGE, signature) 
+        const address = ethers.utils.verifyMessage(DEFAULT_MESSAGE, signature)
         const addressHashed = await this.hash(address)
- 
+
         if (!docsIds && docsIds.length === 0) {
             throw new Error("No docs ID provided")
         }
@@ -222,29 +222,39 @@ export class GptServer extends Base {
         let contents = []
 
         // load all docs to in-memory vector store
-        for (let docsId of docsIds) { 
+        for (let docsId of docsIds) {
             const content = await this.getDocs({
                 collection,
                 password,
-                docsCommitment : docsId
+                docsCommitment: docsId
             })
-            contents.push(content) 
+            contents.push(content)
         }
 
-       
+
         const output = await this.qa(prompt, contents)
- 
+
         // save result 
-        const existing = await this.getPromptResult(addressHashed) 
+        const existing = await this.getPromptResult(addressHashed)
         const { prompts, result } = existing
 
         const db = this.getDb("prompts")
 
-        await db.put({
-            _id: `${addressHashed}`,
-            prompts : prompts.concat([prompt]),
-            result : result.concat([output])
-        })
+        try {
+            const response = await db.get(`${addressHashed}`) 
+            await db.put({
+                _id: `${addressHashed}`,
+                _rev : response["_rev"],
+                prompts: prompts.concat([prompt]),
+                result: result.concat([output])
+            })
+        } catch (e) {
+            await db.put({
+                _id: `${addressHashed}`,
+                prompts: prompts.concat([prompt]),
+                result: result.concat([output])
+            })
+        }
 
         return output
     }
@@ -254,11 +264,11 @@ export class GptServer extends Base {
         const splitter = new RecursiveCharacterTextSplitter({
             chunkSize: 1000
         });
-        
+
         const parseDocs = await splitter.createDocuments(contents);
         // import to vector db
-       
-        const vectorStore = await MemoryVectorStore.fromTexts( parseDocs.map(item => item.pageContent), parseDocs.map(item => item.metadata) , this.embeddings)
+
+        const vectorStore = await MemoryVectorStore.fromTexts(parseDocs.map(item => item.pageContent), parseDocs.map(item => item.metadata), this.embeddings)
         const chain = loadQARefineChain(this.model);
 
         const question = prompt

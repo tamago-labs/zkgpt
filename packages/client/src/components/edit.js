@@ -6,23 +6,10 @@ import { GptContext } from "@/hooks/useGPT"
 import { SpinnerWithRow } from "./loading"
 
 
-const Edit = ({ slug, collection }) => {
+const Edit = ({ slug, collection , loading, docs }) => {
 
-    const { showAddDocsModal, listDocs } = useContext(GptContext)
+    const { showAddDocsModal } = useContext(GptContext)
     const { account } = useWeb3React()
-
-    const [loading, setLoading] = useState(true)
-    const [docs, setDocs] = useState()
-
-    useEffect(() => {
-        collection && listDocs(collection).then(
-            (docs) => {
-                console.log(docs)
-                setDocs(docs)
-                setLoading(false)
-            }
-        )
-    }, [collection])
 
     return (
         <div class="w-full p-6">

@@ -56,7 +56,7 @@ export default function Home() {
           <div class=" w-full rounded-md bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1">
             <div class="flex h-full w-full items-center justify-center bg-gray-800 back flex-col">
               <div class="p-6 pt-8 pb-6">
-                <h1 class="text-2xl font-black text-white">An Open-Source Toolkit for Building a Restricted-Access Knowledge Hub for Sensitive Information</h1>
+                <h1 class="text-2xl font-black text-white">Build a private GPT-based knowledge hub for your organization & team</h1>
                 <div class="mt-4 flex justify-center">
                   <div class="inline-flex rounded-md bg-white shadow">
                     <div onClick={
@@ -113,9 +113,9 @@ export default function Home() {
                 )
               })}
             </div>
-            <h1 class="text-2xl mt-4 text-center text-white font-bold">
-              Recent Queries
-            </h1>
+            {/* <h1 class="text-2xl mt-4 text-center text-white font-bold">
+              How It Works
+            </h1> */}
           </div>
         )}
       </FullLayout>
