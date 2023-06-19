@@ -26,7 +26,7 @@ async function main() {
   await zkgpt.waitForDeployment();
 
   console.log(
-    `Deployed to ${zkgpt.target}`
+    `Deployed zkGPT contract to ${zkgpt.target}`
   );
 }
 

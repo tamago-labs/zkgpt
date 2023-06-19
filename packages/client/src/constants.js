@@ -11,6 +11,7 @@ export const Connectors = [
     }
 ]
 
-export const host = "http://localhost:8000" 
+export const host = process.env.HOST
+// export const host = "http://localhost:8000"
 
-export const contractAddress = "0x53BdF45DfC131b791F57b1ee9ec5246498E33f60"
+export const contractAddress = "0xd074fEDb0E82bBDC91CD032719D0F9549796521c" // replace with your contract here

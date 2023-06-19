@@ -207,7 +207,7 @@ const Provider = ({ children }) => {
             const commitment = (await contract.getDocsCommitment(collectionId, i))
             docs.push({
                 name,
-                commitment : `${commitment}`
+                commitment: `${commitment}`
             })
         }
 
@@ -215,37 +215,95 @@ const Provider = ({ children }) => {
 
     }, [account, library])
 
+    const hash = async (content) => {
+        const poseidon = await buildPoseidon()
+        return poseidon.F.toObject(poseidon([encode(content)]))
+    }
+
+    const encodePrompt = async ({
+        prompt,
+        prompts
+    }) => {
+
+
+        let encoded = []
+
+        for (let i = 0; i < 5; i++) {
+            const p = prompts[i]
+            if (p) {
+                encoded.push(await hash(p))
+            } else {
+                encoded.push(0)
+            }
+        }
+
+        const index = encoded.indexOf(0)
+        if (index === -1) {
+            throw new Error("No more prompt allowed for given address")
+        }
+
+        encoded[index] = await hash(prompt)
+
+        return encoded
+    }
+
     const query = useCallback(async ({
         password,
         prompt,
         collection,
-        docs
+        docs,
+        prompts
     }) => {
 
         const signature = await library.getSigner().signMessage("Sign to proceed")
-        
-        const input = {
-            collection : collection.name,
-            collectionId : collection.id,
-            collectionCommitment : collection.commitment,
-            password,
+
+        const encoded = await encodePrompt({
             prompt,
+            prompts
+        })
+
+        console.log("encoded : ", encoded)
+
+        const prove = await plonk.fullProve(
+            {
+                id: collection.id,
+                groupPassword: encode(password),
+                collectionCommitment : collection.commitment,
+                address: (await hash(account)),
+                prompt: encoded
+            },
+            `../circuits/query.wasm`,
+            `../circuits/query.zkey`
+        )
+
+        console.log("prove : ", prove)
+
+        const { proof , publicSignals } = prove
+
+        const input = {
+            prompt,
+            signature,
+            collection :collection.name,
+            password,
+            proof,
+            publicSignals,
             docsIds : docs.map(item => item.commitment),
-            signature
         }
 
-        const { data } = await axios.post(`${host}/query`, {
+        console.log("input : ", input)
+
+        const { data } = await axios.post(`${host}/query2`, {
             ...input
         })
 
         console.log("data : ", data)
 
-    },[account, library ])
+    }, [account, library])
 
     const loadPromptResult = useCallback(async () => {
 
         // convert to poseidon hash
-        const poseidon = await buildPoseidon() 
+        const poseidon = await buildPoseidon()
         const hash = `${poseidon.F.toObject(poseidon([encode(account)]))}`
 
         console.log("hash : ", hash)
@@ -253,7 +311,7 @@ const Provider = ({ children }) => {
         const { data } = await axios.get(`${host}/prompt/${hash}`)
 
         return data
-    },[account])
+    }, [account])
 
     const gptContext = useMemo(
         () => ({

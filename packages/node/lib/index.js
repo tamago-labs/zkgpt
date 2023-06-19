@@ -136,6 +136,31 @@ app.post('/query', async (req, res) => {
     }
 })
 
+// query with proof generated on the client
+app.post('/query2', async (req, res) => {
+
+    try {
+        const { body } = req
+
+        const { prompt, signature, collection, password, proof, publicSignals , docsIds } = body
+        const prove = {
+            proof,
+            publicSignals
+        }
+        const output = await gpt.query({
+            prompt,
+            signature,
+            collection,
+            password,
+            prove : (prove),
+            docsIds
+        })
+        return res.status(200).json({ status: "ok", output });
+    } catch (e) {
+        return res.status(400).json({ status: "error", error: e.message });
+    }
+})
+
 // get prompts 
 app.get('/prompt/:address', async (req, res) => {
 

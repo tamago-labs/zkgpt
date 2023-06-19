@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  env: {
+    HOST: process.env.HOST || "http://localhost:8000"
+  },
   webpack5: true,
   webpack: function (config, options) {
     if (!options.isServer) {

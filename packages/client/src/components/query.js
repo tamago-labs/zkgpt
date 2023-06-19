@@ -31,11 +31,14 @@ const Query = ({ slug, loading, collection, docs }) => {
 
         try {
 
+            const  {prompts } = result
+
             await query({
                 collection,
                 password,
                 prompt,
-                docs
+                docs,
+                prompts
             })
 
             setPrompt()
@@ -52,7 +55,7 @@ const Query = ({ slug, loading, collection, docs }) => {
 
         setProcessing(false)
 
-    }, [password, prompt, collection, docs])
+    }, [password, prompt, collection, docs, result])
 
     useEffect(() => {
         account && loadPromptResult().then(setResult)
