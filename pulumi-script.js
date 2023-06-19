@@ -2,12 +2,10 @@
 const pulumi = require("@pulumi/pulumi");
 const aws = require("@pulumi/aws");
 const awsx = require("@pulumi/awsx");
-const apigateway = require("@pulumi/aws-apigateway")
-const crypto = require("crypto")
 
 const cluster = new aws.ecs.Cluster("cluster", {});
- 
-const lb = new awsx.lb.ApplicationLoadBalancer("lb-zkgpt", { listener: { port: 8000 }, securityGroups: cluster.securityGroups, defaultTargetGroup: { port: 8000, deregistrationDelay: 0 } });
+
+const lb = new awsx.lb.ApplicationLoadBalancer("lb-zkgpt", { listener: { port: 8000 },  defaultTargetGroup: { port: 8000, deregistrationDelay: 0 } });
 
 const service = new awsx.ecs.FargateService("service", {
     cluster: cluster.arn,

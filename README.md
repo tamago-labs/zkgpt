@@ -6,6 +6,10 @@ Intro
 
 xxx
 
+## Technologies
+
+
+
 ## Repository structure
 
 The project using a monorepo structure consists of 4 different packages that have been interconnected using [Lerna](https://lerna.js.org).
