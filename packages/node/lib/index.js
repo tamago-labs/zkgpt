@@ -2,7 +2,9 @@
 import * as fastq from "fastq";
 import express from "express";
 import cors from "cors"
-import { GptServer } from "lib"
+import pkg from 'lib';
+
+const { GptServer } = pkg
 
 import 'dotenv/config'
 

@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  zkgpt:
+    image: pisuthd/zkgpt
+    build:
+      context: ./
+    ports:
+      - 8000:8000
+    environment:
+      OPENAI_API_KEY: YOUR_API_KEY
+    volumes:
+      - ./:/src
